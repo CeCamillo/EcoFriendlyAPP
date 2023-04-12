@@ -59,17 +59,26 @@ export const Result = ({ display, toHome }) => {
       <View style={styles.infoContainer}>
         <View style={styles.slideBar} />
         <View style={styles.info}>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, alignItems: "center" }}>
             <Image
               source={require("../../../assets/img/bicicleta.png")}
               style={{ width: 100, height: 100 }}
             />
-            <Text>Bicicleta</Text>
+            <Text style={styles.textBold}>Bicicleta</Text>
           </View>
           <View style={{ flex: 1 }}>
-            <Text>Distancia</Text>
-            <Text>Emissao</Text>
-            <Text>Tempo</Text>
+            <Text>
+              <Text style={styles.textBold}>Distancia: </Text>
+              text
+            </Text>
+            <Text>
+              <Text style={styles.textBold}>Emissao: </Text>
+              text
+            </Text>
+            <Text>
+              <Text style={styles.textBold}>Tempo: </Text>
+              text
+            </Text>
           </View>
         </View>
       </View>
@@ -133,11 +142,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   info: {
-    borderWidth: 1,
-    borderColor: "#000",
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  textBold: {
+    fontWeight: "bold",
   },
 });

@@ -2,7 +2,9 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import { Home } from "./src/screens/Home/Home";
 import { Result } from "./src/screens/Result/Result";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import axios from "axios";
 
 export default function App() {
   const [homeDisplay, setHomeDisplay] = useState("flex");
@@ -17,6 +19,22 @@ export default function App() {
     setHomeDisplay("flex");
     setResultDisplay("none");
   }
+
+  // Função de acesso à API
+  const getApi = async () => {
+    try {
+      const result = await axios.get(
+        "http://192.168.15.24:8080/emissao?distancia=5&transporte=Carro"
+      );
+      console.log(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getApi();
+  }, []);
 
   return (
     <View style={styles.body}>
