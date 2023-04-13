@@ -32,9 +32,9 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    getApi();
-  }, []);
+  // useEffect(() => {
+  //   getApi();
+  // }, []);
 
   return (
     <View style={styles.body}>
