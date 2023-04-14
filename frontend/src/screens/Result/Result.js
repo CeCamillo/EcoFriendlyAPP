@@ -1,10 +1,24 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable } from "react-native";
+import { useState } from "react";
 import { Map } from "../../components/Map";
 import BackButton from "../../components/BackButton";
 import SearchInput from "../../components/SearchInput";
 import { Button } from "../../components/Button";
 
 export const Result = ({ display, toHome }) => {
+  const [infoDisplay, setInfoDisplay] = useState("flex");
+  const [infoVisible, setInfoVisible] = useState(true);
+
+  function toggleInfo() {
+    if (infoVisible === true) {
+      setInfoDisplay("none");
+      setInfoVisible(false);
+    } else if (infoVisible === false) {
+      setInfoDisplay("flex");
+      setInfoVisible(true);
+    }
+  }
+
   return (
     <View style={[styles.resultContainer, { display: display }]}>
       <View style={styles.headerContainer}>
@@ -57,8 +71,15 @@ export const Result = ({ display, toHome }) => {
         <Map />
       </View>
       <View style={styles.infoContainer}>
-        <View style={styles.slideBar} />
-        <View style={styles.info}>
+        <Pressable
+          onPress={() => {
+            toggleInfo();
+          }}
+          style={styles.slideBar}
+        >
+          <View style={styles.slideBarInside} />
+        </Pressable>
+        <View style={[styles.info, { display: infoDisplay }]}>
           <View style={{ flex: 1, alignItems: "center" }}>
             <Image
               source={require("../../../assets/img/bicicleta.png")}
@@ -107,30 +128,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   infoContainer: {
+    borderWidth: 1,
     position: "absolute",
     width: "100%",
-    height: 300,
     bottom: -30,
     backgroundColor: "#E8FCCF",
     justifyContent: "space-around",
     alignItems: "center",
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 9,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 9.22,
-    elevation: 12,
-
-    paddingVertical: 28,
+    paddingVertical: 20,
     paddingHorizontal: 15,
   },
   slideBar: {
     width: "80%",
+    height: 20,
+    marginBottom: 30,
+  },
+  slideBarInside: {
+    width: "100%",
     height: 5,
     backgroundColor: "#134611",
-    marginBottom: 30,
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
@@ -143,6 +159,7 @@ const styles = StyleSheet.create({
   },
   info: {
     flex: 1,
+    height: 200,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

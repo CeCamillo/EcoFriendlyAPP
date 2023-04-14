@@ -1,4 +1,5 @@
 import { StyleSheet, View } from "react-native";
+
 import { Button } from "../../components/Button";
 import { Map } from "../../components/Map";
 import SearchInput from "../../components/SearchInput";
@@ -90,8 +91,8 @@ export const Home = ({ display, toResult }) => {
 const styles = StyleSheet.create({
   homeContainer: {
     width: "100%",
-    height: "93.5%",
+    height: "90.5%",
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
   },
 });
