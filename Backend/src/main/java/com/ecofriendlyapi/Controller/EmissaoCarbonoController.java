@@ -24,7 +24,7 @@ public class EmissaoCarbonoController {
     }
 
     @GetMapping("/emissao")
-    public Map<String, Object> getEmissaoCarbono(@RequestParam("srcLat") double srcLat, @RequestParam("srcLon") double srcLon, @RequestParam("destLat") double destLat, @RequestParam("destLon") double destLon) {
+    public Map<String, Object> getEmissaoCarbono(@RequestParam("initLat") double srcLat, @RequestParam("initLon") double srcLon, @RequestParam("finLat") double destLat, @RequestParam("finLon") double destLon) {
          return osrmService.getRoute(srcLat,srcLon,destLat,destLon);
     }
 }

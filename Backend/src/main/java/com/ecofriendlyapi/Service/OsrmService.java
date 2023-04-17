@@ -13,11 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class OsrmService {
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public HashMap<String, Object> getRoute(double srcLat, double srcLon, double destLat, double destLon) {
+    public HashMap<String, Object> getRoute(double initLat, double initLon, double finLat, double finLon) {
         String ApiURL = "https://router.project-osrm.org/route/v1/driving/";
-        String coordenadas = srcLon + "," + srcLat + ";" + destLon + "," + destLat;
-//        String url = ApiURL + coordenadas + "?overview=false&geometries=geojson&steps=true&alternatives=true";
-        String url = ApiURL + coordenadas;
+        String coordenadas = initLon + "," + initLat + ";" + finLon + "," + finLat;
+        String url = ApiURL + coordenadas + "?overview=simplified&geometries=geojson&steps=false&alternatives=false";
 
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
