@@ -2,6 +2,7 @@ package com.ecofriendlyapi.Controller;
 
 import com.ecofriendlyapi.Model.ModoTransporte;
 import com.ecofriendlyapi.Service.EmissaoCarbonoService;
+import com.ecofriendlyapi.Service.OsrmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,20 +16,15 @@ public class EmissaoCarbonoController {
     private EmissaoCarbonoService emissaoCarbonoService;
 
     @Autowired
+    private OsrmService osrmService;
+
+    @Autowired
     public EmissaoCarbonoController(EmissaoCarbonoService emissaoCarbonoService) {
         this.emissaoCarbonoService = emissaoCarbonoService;
     }
 
     @GetMapping("/emissao")
-    public Map<String, Object> getEmissaoCarbono(@RequestParam("distancia") double distancia, @RequestParam("transporte") String nomeModo) {
-        ModoTransporte modoTransporte = emissaoCarbonoService.procurarTransporte(nomeModo);
-        double emissaoCarbono = emissaoCarbonoService.emissaoCarbono(modoTransporte, distancia);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("Emissão", emissaoCarbono);
-        response.put("Distancia", distancia);
-        response.put("Modo de transporte", nomeModo);
-
-        return response;
+    public Map<String, Object> getEmissaoCarbono(@RequestParam("srcLat") double srcLat, @RequestParam("srcLon") double srcLon, @RequestParam("destLat") double destLat, @RequestParam("destLon") double destLon) {
+         return osrmService.getRoute(srcLat,srcLon,destLat,destLon);
     }
 }

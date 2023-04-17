@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmissaoCarbonoService {
     private ModoTransporteLista modoTransporteLista;
-@Autowired
+    @Autowired
     public EmissaoCarbonoService(ModoTransporteLista modoTransporteLista) {
         this.modoTransporteLista = modoTransporteLista;
     }
