@@ -15,6 +15,7 @@ export const Home = ({ display, toResult }) => {
   let phoneLocal = { latitude: null, longitude: null };
   const [expoLocation, setExpoLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  let travel = { duration: null, distance: null, way: null };
 
   useEffect(() => {
     (async () => {
@@ -90,7 +91,6 @@ export const Home = ({ display, toResult }) => {
       } catch (error) {
         console.log(error);
       }
-      toResult(locationAPI);
 
       if (errorMsg) {
         phoneLocalString = errorMsg;
@@ -103,10 +103,14 @@ export const Home = ({ display, toResult }) => {
         const distanceResult = await axios.get(
           `http://192.168.15.24:8080/emissao?initLat=${phoneLocal.latitude}&initLon=${phoneLocal.longitude}&finLat=${locationAPI.latitude}&finLon=${locationAPI.longitude}`
         );
-        console.log(distanceResult);
+        console.log(distanceResult.data);
+        travel.distance = distanceResult.data.routes[0].distance;
+        travel.duration = distanceResult.data.routes[0].duration;
+        travel.way = distanceResult.data.routes[0].geometry.coordinates;
       } catch (error) {
         console.log(error);
       }
+      toResult(travel);
     }
   }
 
@@ -120,9 +124,9 @@ export const Home = ({ display, toResult }) => {
           placeholder="Buscar Endereço"
         />
       </View>
-      <View style={{ width: 390, height: 520 }}>
+      {/* <View style={{ width: 390, height: 520 }}>
         <Map borderRadius={true} />
-      </View>
+      </View> */}
       <Button
         label="Buscar local"
         background="#3E8914"

@@ -1,16 +1,22 @@
 import { StyleSheet, View, Text, Image, Pressable } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Map } from "../../components/Map";
 import BackButton from "../../components/BackButton";
 import SearchInput from "../../components/SearchInput";
 import { Button } from "../../components/Button";
 
-export const Result = ({ display, toHome, locationAPI }) => {
+export const Result = ({ display, toHome, travel }) => {
   const [infoDisplay, setInfoDisplay] = useState("flex");
   const [infoVisible, setInfoVisible] = useState(true);
 
+  // Calculos pra formatar duração
+  let horas = Math.floor(travel.duration / 3600);
+  let minutos = Math.floor((travel.duration % 3600) / 60);
+
+  let durationFormated = horas.toString() + "h" + minutos.toString() + "min";
+
   function toggleInfo() {
-    alert(locationAPI.latitude + "" + locationAPI.longitude);
+    // alert(travel.distance + "" + travel.duration);
     if (infoVisible === true) {
       setInfoDisplay("none");
       setInfoVisible(false);
@@ -34,11 +40,11 @@ export const Result = ({ display, toHome, locationAPI }) => {
             button={true}
           />
         </View>
-        <View style={styles.headerBottom}>
+        {/* <View style={styles.headerBottom}>
           <Button
             fontSize={10}
             fontColor={"#3E8914"}
-            label={"16min"}
+            label={"inativo"}
             width={100}
             height={45}
             background={"#E8FCCF"}
@@ -46,7 +52,7 @@ export const Result = ({ display, toHome, locationAPI }) => {
           <Button
             fontSize={10}
             fontColor={"#3E8914"}
-            label={"16min"}
+            label={"inativo"}
             width={100}
             height={45}
             background={"#E8FCCF"}
@@ -54,7 +60,7 @@ export const Result = ({ display, toHome, locationAPI }) => {
           <Button
             fontSize={10}
             fontColor={"#3E8914"}
-            label={"16min"}
+            label={"inativo"}
             width={100}
             height={45}
             background={"#E8FCCF"}
@@ -62,12 +68,12 @@ export const Result = ({ display, toHome, locationAPI }) => {
           <Button
             fontSize={10}
             fontColor={"#3E8914"}
-            label={"16min"}
+            label={"inativo"}
             width={100}
             height={45}
             background={"#E8FCCF"}
           />
-        </View>
+        </View> */}
       </View>
       <View style={{ width: "100%", flex: 1 }}>
         <Map />
@@ -87,20 +93,20 @@ export const Result = ({ display, toHome, locationAPI }) => {
               source={require("../../../assets/img/bicicleta.png")}
               style={{ width: 100, height: 100 }}
             />
-            <Text style={styles.textBold}>Bicicleta</Text>
+            <Text style={styles.textBold}>Carro</Text>
           </View>
           <View style={{ flex: 1 }}>
             <Text>
               <Text style={styles.textBold}>Distancia: </Text>
-              text
+              {(travel.distance / 100).toFixed(1)} km
             </Text>
             <Text>
               <Text style={styles.textBold}>Emissao: </Text>
-              text
+              {((travel.distance / 100) * 0.12).toFixed(2)} CO2/km
             </Text>
             <Text>
               <Text style={styles.textBold}>Tempo: </Text>
-              text
+              {durationFormated}
             </Text>
           </View>
         </View>
