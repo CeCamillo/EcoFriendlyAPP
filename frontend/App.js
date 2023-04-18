@@ -9,6 +9,7 @@ import axios from "axios";
 export default function App() {
   const [homeDisplay, setHomeDisplay] = useState("flex");
   const [resultDisplay, setResultDisplay] = useState("none");
+  const [location, setLocation] = useState("None");
 
   function toResult() {
     setHomeDisplay("none");
@@ -38,8 +39,18 @@ export default function App() {
 
   return (
     <View style={styles.body}>
-      <Home display={homeDisplay} toResult={() => toResult()} />
-      <Result display={resultDisplay} toHome={() => toHome()} />
+      <Home
+        display={homeDisplay}
+        toResult={(location) => {
+          toResult();
+          setLocation(location);
+        }}
+      />
+      <Result
+        display={resultDisplay}
+        locationAPI={location}
+        toHome={() => toHome()}
+      />
       <StatusBar style="auto" />
     </View>
   );

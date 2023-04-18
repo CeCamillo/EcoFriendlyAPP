@@ -5,11 +5,12 @@ import BackButton from "../../components/BackButton";
 import SearchInput from "../../components/SearchInput";
 import { Button } from "../../components/Button";
 
-export const Result = ({ display, toHome }) => {
+export const Result = ({ display, toHome, locationAPI }) => {
   const [infoDisplay, setInfoDisplay] = useState("flex");
   const [infoVisible, setInfoVisible] = useState(true);
 
   function toggleInfo() {
+    alert(locationAPI.latitude + "" + locationAPI.longitude);
     if (infoVisible === true) {
       setInfoDisplay("none");
       setInfoVisible(false);
@@ -30,6 +31,7 @@ export const Result = ({ display, toHome }) => {
               console.log(txt);
             }}
             width={"80%"}
+            button={true}
           />
         </View>
         <View style={styles.headerBottom}>

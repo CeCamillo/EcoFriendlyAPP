@@ -7,22 +7,35 @@ import {
   StyleSheet,
 } from "react-native";
 
-const SearchInput = ({ placeholder, onSearch, width }) => {
+const SearchInput = ({ placeholder, onSearch, width, button }) => {
   const [text, setText] = useState("");
 
-  return (
-    <View style={[styles.inputContainer, { width: width }]}>
-      <TextInput
-        style={styles.input}
-        onChangeText={(text) => setText(text)}
-        value={text}
-        placeholder={placeholder}
-      />
-      <TouchableOpacity style={styles.button} onPress={() => onSearch(text)}>
-        <Text style={styles.buttonText}>Buscar</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  if (button) {
+    return (
+      <View style={[styles.inputContainer, { width: width }]}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setText(text)}
+          value={text}
+          placeholder={placeholder}
+        />
+        <TouchableOpacity style={styles.button} onPress={() => onSearch(text)}>
+          <Text style={styles.buttonText}>Buscar</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  } else {
+    return (
+      <View style={[styles.inputContainer, { width: width }]}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setText(text)}
+          value={text}
+          placeholder={placeholder}
+        />
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

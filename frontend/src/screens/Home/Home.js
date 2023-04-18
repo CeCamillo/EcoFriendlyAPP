@@ -1,77 +1,125 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TextInput } from "react-native";
+import { useState, useEffect } from "react";
+import * as Location from "expo-location";
 
 import { Button } from "../../components/Button";
 import { Map } from "../../components/Map";
-import SearchInput from "../../components/SearchInput";
 import axios from "axios";
 
 export const Home = ({ display, toResult }) => {
+  const [adressInputText, setAdressInputText] = useState("");
   let inputText;
   let formatedText = {};
   let URL;
+  let locationAPI = { latitude: "", longitude: "" };
+  let phoneLocal = { latitude: null, longitude: null };
+  const [expoLocation, setExpoLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-  function searchAdress(text) {
+  useEffect(() => {
+    (async () => {
+      // Solicitar permissão para acessar a localização em primeiro plano
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permissão para acessar a localização foi negada");
+        return;
+      }
+
+      // Obter a localização atual
+      let location = await Location.getCurrentPositionAsync({});
+      setExpoLocation(location);
+    })();
+  }, []);
+
+  async function searchAdress(text) {
     // https://nominatim.openstreetmap.org/search?state=amazonas&street=avenida%20das%20flores%format=json
-    console.log(text);
-    inputText = text
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .split(", ");
-    for (let i = 0; i < inputText.length; i++) {
-      inputText[i] = inputText[i].replace(" ", "%20");
-    }
-    switch (inputText.length) {
-      case 1:
-        if (inputText[0] == "brasil" || inputText[0] == "brazil") {
-          console("Inseriu Brasil.");
+    if (text == null || text == "") {
+      alert("Digite algo imbecil");
+    } else {
+      console.log(`Texto pré formatado: ${text}`);
+      inputText = text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .split(", ");
+      for (let i = 0; i < inputText.length; i++) {
+        inputText[i] = inputText[i].replace(/ /g, "%20");
+      }
+      switch (inputText.length) {
+        case 1:
+          if (inputText[0] == "brasil" || inputText[0] == "brazil") {
+            console("Inseriu Brasil.");
+            break;
+          }
+          formatedText = { state: inputText[0] };
+          console.log("TEXTO FORMATADO:");
+          console.log(formatedText);
+          URL = `https://nominatim.openstreetmap.org/search?state=${formatedText.state}&format=json`;
+          console.log(`URL da API: ${URL}`);
           break;
-        }
-        formatedText = { state: inputText[0] };
-        console.log(formatedText);
-        URL = `https://nominatim.openstreetmap.org/search?state=${formatedText.state}&format=json`;
-        console.log(URL);
-        break;
-      case 2:
-        formatedText = { city: inputText[0], state: inputText[1] };
-        console.log(formatedText);
-        URL = `https://nominatim.openstreetmap.org/search?state=${formatedText.state}&city=${formatedText.city}&format=json`;
-        console.log(URL);
-        break;
-      case 3:
-        formatedText = {
-          street: inputText[0],
-          city: inputText[1],
-          state: inputText[2],
-        };
-        console.log(formatedText);
-        URL = `https://nominatim.openstreetmap.org/search?state=${formatedText.state}&city=${formatedText.city}&street=${formatedText.street}&format=json`;
-        console.log(URL);
-        break;
-      default:
-        console.log("Algo deu errado antes do SwitchCase");
+        case 2:
+          formatedText = { city: inputText[0], state: inputText[1] };
+          console.log("TEXTO FORMATADO:");
+          console.log(formatedText);
+          URL = `https://nominatim.openstreetmap.org/search?state=${formatedText.state}&city=${formatedText.city}&format=json`;
+          console.log(`URL da API: ${URL}`);
+          break;
+        case 3:
+          formatedText = {
+            street: inputText[0],
+            city: inputText[1],
+            state: inputText[2],
+          };
+          console.log("TEXTO FORMATADO:");
+          console.log(formatedText);
+          URL = `https://nominatim.openstreetmap.org/search?state=${formatedText.state}&city=${formatedText.city}&street=${formatedText.street}&format=json`;
+          console.log(`URL da API: ${URL}`);
+          break;
+        default:
+          console.log("Algo deu errado antes do SwitchCase");
+      }
+
+      try {
+        const locationResult = await axios.get(URL);
+        console.log(locationResult.data);
+        locationAPI.latitude = locationResult.data[0].lat;
+        locationAPI.longitude = locationResult.data[0].lon;
+        console.log(".");
+        console.log(".");
+        console.log(".");
+      } catch (error) {
+        console.log(error);
+      }
+      toResult(locationAPI);
+
+      if (errorMsg) {
+        phoneLocalString = errorMsg;
+      } else if (expoLocation) {
+        phoneLocal.latitude = JSON.stringify(expoLocation.coords.latitude);
+        phoneLocal.longitude = JSON.stringify(expoLocation.coords.longitude);
+      }
+
+      try {
+        const distanceResult = await axios.get(
+          `http://192.168.15.24:8080/emissao?initLat=${phoneLocal.latitude}&initLon=${phoneLocal.longitude}&finLat=${locationAPI.latitude}&finLon=${locationAPI.longitude}`
+        );
+        console.log(distanceResult);
+      } catch (error) {
+        console.log(error);
+      }
     }
-    // const getApi = async () => {
-    //   try {
-    //     const result = await axios.get(
-    //       "http://192.168.15.24:8080/emissao?distancia=5&transporte=Carro"
-    //     );
-    //     console.log(result.data);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
   }
 
   return (
     <View style={[styles.homeContainer, { display: display }]}>
-      <SearchInput
-        placeholder={"Buscar Endereço..."}
-        onSearch={(txt) => {
-          searchAdress(txt);
-        }}
-        width={"90%"}
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.adressInput}
+          value={adressInputText}
+          onChangeText={(text) => setAdressInputText(text)}
+          placeholder="Buscar Endereço"
+        />
+      </View>
       <View style={{ width: 390, height: 520 }}>
         <Map borderRadius={true} />
       </View>
@@ -82,7 +130,13 @@ export const Home = ({ display, toResult }) => {
         fontSize={16}
         width={320}
         height={68}
-        action={() => toResult()}
+        action={() => {
+          if (adressInputText != "") {
+            searchAdress(adressInputText);
+          } else {
+            alert("Busque um local primeiro!!");
+          }
+        }}
       />
     </View>
   );
@@ -94,5 +148,28 @@ const styles = StyleSheet.create({
     height: "90.5%",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    margin: 10,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 2,
+    height: 50,
+    minWidth: 360,
+    width: "90%",
+    borderColor: "#3E8914",
+    borderWidth: 1,
+  },
+  adressInput: {
+    flex: 1,
+    height: "90%",
+    margin: 10,
+    paddingHorizontal: 10,
   },
 });
