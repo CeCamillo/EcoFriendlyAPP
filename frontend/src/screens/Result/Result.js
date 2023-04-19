@@ -75,9 +75,9 @@ export const Result = ({ display, toHome, travel }) => {
           />
         </View> */}
       </View>
-      <View style={{ width: "100%", flex: 1 }}>
+      {/* <View style={{ width: "100%", flex: 1 }}>
         <Map />
-      </View>
+      </View> */}
       <View style={styles.infoContainer}>
         <Pressable
           onPress={() => {
@@ -98,11 +98,11 @@ export const Result = ({ display, toHome, travel }) => {
           <View style={{ flex: 1 }}>
             <Text>
               <Text style={styles.textBold}>Distancia: </Text>
-              {(travel.distance / 100).toFixed(1)} km
+              {(travel.distance / 1000).toFixed(1)} km
             </Text>
             <Text>
-              <Text style={styles.textBold}>Emissao: </Text>
-              {((travel.distance / 100) * 0.12).toFixed(2)} CO2/km
+              <Text style={styles.textBold}>Emissao (CO2): </Text>
+              {((travel.distance / 1000) * 0.12).toFixed(2)} g/km
             </Text>
             <Text>
               <Text style={styles.textBold}>Tempo: </Text>

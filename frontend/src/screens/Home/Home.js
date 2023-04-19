@@ -1,10 +1,10 @@
-import { StyleSheet, View, TextInput } from "react-native";
+import { StyleSheet, View, TextInput, Text } from "react-native";
 import { useState, useEffect } from "react";
 import * as Location from "expo-location";
+import axios from "axios";
 
 import { Button } from "../../components/Button";
 import { Map } from "../../components/Map";
-import axios from "axios";
 
 export const Home = ({ display, toResult }) => {
   const [adressInputText, setAdressInputText] = useState("");
@@ -77,7 +77,9 @@ export const Home = ({ display, toResult }) => {
           console.log(`URL da API: ${URL}`);
           break;
         default:
-          console.log("Algo deu errado antes do SwitchCase");
+          alert("Você não seguiu as regras de pesquisa propostas");
+          console.log("Você não seguiu as regras de pesquisa propostas");
+          return;
       }
 
       try {
@@ -100,8 +102,9 @@ export const Home = ({ display, toResult }) => {
       }
 
       try {
+        // Mude o IP quando trocar de rede:
         const distanceResult = await axios.get(
-          `http://192.168.15.24:8080/emissao?initLat=${phoneLocal.latitude}&initLon=${phoneLocal.longitude}&finLat=${locationAPI.latitude}&finLon=${locationAPI.longitude}`
+          `http://{SEU IPV4}:8080/emissao?initLat=${phoneLocal.latitude}&initLon=${phoneLocal.longitude}&finLat=${locationAPI.latitude}&finLon=${locationAPI.longitude}`
         );
         console.log(distanceResult.data);
         travel.distance = distanceResult.data.routes[0].distance;
@@ -116,13 +119,18 @@ export const Home = ({ display, toResult }) => {
 
   return (
     <View style={[styles.homeContainer, { display: display }]}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.adressInput}
-          value={adressInputText}
-          onChangeText={(text) => setAdressInputText(text)}
-          placeholder="Buscar Endereço"
-        />
+      <View style={styles.header}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.adressInput}
+            value={adressInputText}
+            onChangeText={(text) => setAdressInputText(text)}
+            placeholder="Rua, Cidade, Estado..."
+          />
+        </View>
+        <Text style={styles.exemple}>
+          Exemplo: Rua Patativa, São José dos Campos, São Paulo
+        </Text>
       </View>
       {/* <View style={{ width: 390, height: 520 }}>
         <Map borderRadius={true} />
@@ -153,9 +161,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  header: {
+    height: 75,
+    bottom: -10,
+    justifyContent: "flex-start",
+  },
+  exemple: {
+    fontSize: 10.5,
+    bottom: 10,
+    left: 25,
+    fontStyle: "italic",
+  },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    justifyContent: "center",
     margin: 10,
     backgroundColor: "#fff",
     borderRadius: 20,

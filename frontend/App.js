@@ -21,22 +21,6 @@ export default function App() {
     setResultDisplay("none");
   }
 
-  // Função de acesso à API
-  const getApi = async () => {
-    try {
-      const result = await axios.get(
-        "http://192.168.15.24:8080/emissao?distancia=5&transporte=Carro"
-      );
-      console.log(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // useEffect(() => {
-  //   getApi();
-  // }, []);
-
   return (
     <View style={styles.body}>
       <Home
