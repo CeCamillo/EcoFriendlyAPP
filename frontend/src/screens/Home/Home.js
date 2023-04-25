@@ -104,7 +104,7 @@ export const Home = ({ display, toResult }) => {
       try {
         // Mude o IP quando trocar de rede:
         const distanceResult = await axios.get(
-          `http://{SEU IPV4}:8080/emissao?initLat=${phoneLocal.latitude}&initLon=${phoneLocal.longitude}&finLat=${locationAPI.latitude}&finLon=${locationAPI.longitude}`
+          `http://192.168.15.24:8080/emissao?initLat=${phoneLocal.latitude}&initLon=${phoneLocal.longitude}&finLat=${locationAPI.latitude}&finLon=${locationAPI.longitude}`
         );
         console.log(distanceResult.data);
         travel.distance = distanceResult.data.routes[0].distance;
