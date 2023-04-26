@@ -1,9 +1,7 @@
 import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 import { useEffect, useState } from "react";
-import { Map } from "../../components/Map";
 import BackButton from "../../components/BackButton";
-import SearchInput from "../../components/SearchInput";
-import { Button } from "../../components/Button";
+import { Card } from "../../components/Card";
 
 export const Result = ({ display, toHome, travel }) => {
   const [infoDisplay, setInfoDisplay] = useState("flex");
@@ -29,56 +27,23 @@ export const Result = ({ display, toHome, travel }) => {
   return (
     <View style={[styles.resultContainer, { display: display }]}>
       <View style={styles.headerContainer}>
-        <View style={styles.headerTop}>
-          <BackButton onPress={() => toHome()} />
-          <SearchInput
-            placeholder={"Atualizar Endereço..."}
-            onSearch={(txt) => {
-              console.log(txt);
-            }}
-            width={"80%"}
-            button={true}
-          />
-        </View>
-        {/* <View style={styles.headerBottom}>
-          <Button
-            fontSize={10}
-            fontColor={"#3E8914"}
-            label={"inativo"}
-            width={100}
-            height={45}
-            background={"#E8FCCF"}
-          />
-          <Button
-            fontSize={10}
-            fontColor={"#3E8914"}
-            label={"inativo"}
-            width={100}
-            height={45}
-            background={"#E8FCCF"}
-          />
-          <Button
-            fontSize={10}
-            fontColor={"#3E8914"}
-            label={"inativo"}
-            width={100}
-            height={45}
-            background={"#E8FCCF"}
-          />
-          <Button
-            fontSize={10}
-            fontColor={"#3E8914"}
-            label={"inativo"}
-            width={100}
-            height={45}
-            background={"#E8FCCF"}
-          />
-        </View> */}
+        <BackButton onPress={() => toHome()} />
       </View>
-      {/* <View style={{ width: "100%", flex: 1 }}>
-        <Map />
-      </View> */}
-      <View style={styles.infoContainer}>
+      <View style={styles.main}>
+        <Card
+          vehicle={"Carro"}
+          distance={`${(travel.distance / 1000).toFixed(1)} km`}
+          emission={`${((travel.distance / 1000) * 0.12).toFixed(2)} g/km`}
+          time={durationFormated}
+        />
+        <Card vehicle={"Automovel"} />
+        <Card vehicle={"Automovel"} />
+        <Card vehicle={"Automovel"} />
+      </View>
+
+      {/* Conteúdo abaixo só salvando pra caso precise */}
+
+      {/* <View style={styles.infoContainer}>
         <Pressable
           onPress={() => {
             toggleInfo();
@@ -110,7 +75,7 @@ export const Result = ({ display, toHome, travel }) => {
             </Text>
           </View>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -119,21 +84,30 @@ const styles = StyleSheet.create({
   resultContainer: {
     width: "100%",
     height: "93.5%",
+    alignItems: "center",
   },
   headerContainer: {
+    justifyContent: "flex-end",
     width: "100%",
-    height: 125,
+    height: 80,
+    position: "absolute",
+    top: -30,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  headerTop: {
-    flex: 1,
+  main: {
+    marginTop: 70,
+    width: "94%",
+    justifyContent: "space-between",
     flexDirection: "row",
-    alignItems: "center",
-  },
-  headerBottom: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
+    flexWrap: "wrap",
   },
   infoContainer: {
     borderWidth: 1,

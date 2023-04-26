@@ -4,7 +4,6 @@ import * as Location from "expo-location";
 import axios from "axios";
 
 import { Button } from "../../components/Button";
-import { Map } from "../../components/Map";
 
 export const Home = ({ display, toResult }) => {
   const [adressInputText, setAdressInputText] = useState("");
@@ -119,6 +118,7 @@ export const Home = ({ display, toResult }) => {
 
   return (
     <View style={[styles.homeContainer, { display: display }]}>
+      <Text style={styles.h1}>Busque o Endereço</Text>
       <View style={styles.header}>
         <View style={styles.inputContainer}>
           <TextInput
@@ -132,16 +132,13 @@ export const Home = ({ display, toResult }) => {
           Exemplo: Rua Patativa, São José dos Campos, São Paulo
         </Text>
       </View>
-      {/* <View style={{ width: 390, height: 520 }}>
-        <Map borderRadius={true} />
-      </View> */}
       <Button
         label="Buscar local"
         background="#3E8914"
         fontColor="#fff"
         fontSize={16}
-        width={320}
-        height={68}
+        width={250}
+        height={58}
         action={() => {
           if (adressInputText != "") {
             searchAdress(adressInputText);
@@ -156,15 +153,31 @@ export const Home = ({ display, toResult }) => {
 
 const styles = StyleSheet.create({
   homeContainer: {
-    width: "100%",
-    height: "90.5%",
+    width: "90%",
+    height: 320,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  h1: {
+    color: "#3E8914",
+    fontWeight: "bold",
+    fontSize: 26,
   },
   header: {
     height: 75,
-    bottom: -10,
     justifyContent: "flex-start",
+    marginBottom: 30,
+    marginTop: 25,
   },
   exemple: {
     fontSize: 10.5,
@@ -183,7 +196,7 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     elevation: 2,
     height: 50,
-    minWidth: 360,
+    minWidth: 320,
     width: "90%",
     borderColor: "#3E8914",
     borderWidth: 1,
