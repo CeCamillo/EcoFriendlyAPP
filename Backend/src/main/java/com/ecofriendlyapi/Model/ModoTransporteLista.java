@@ -32,6 +32,10 @@ public class ModoTransporteLista {
         return false;
     }
 
+    public List<ModoTransporte> getModosTransporte() {
+        return modosTransporte;
+    }
+
     public ModoTransporte ProcurarModoTransporte(String nomeModo) {
         for (int i = 0; i < modosTransporte.size(); i++) {
             ModoTransporte modoTransporte = modosTransporte.get(i);

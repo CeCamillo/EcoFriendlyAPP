@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,27 +37,25 @@ public class EmissaoCarbonoController {
             @RequestParam("initLat") double srcLat,
             @RequestParam("initLon") double srcLon,
             @RequestParam("finLat") double destLat,
-            @RequestParam("finLon") double destLon,
-            @RequestParam("modoTransporte") String modoTransporte
+            @RequestParam("finLon") double destLon
     ) {
         Map<String, Object> rota = osrmService.getRoute(srcLat, srcLon, destLat, destLon);
-
-        ModoTransporte modoSelecionado = modoTransporteLista.ProcurarModoTransporte(modoTransporte);
-        if (modoSelecionado == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Modo de transporte invalido");
-        }
 
         Double distancia = ((List<Map<String, Object>>) rota.get("routes"))
                 .stream()
                 .flatMap(route -> ((List<Map<String, Object>>) route.get("legs")).stream())
                 .collect(Collectors.summingDouble(leg -> (Double) leg.get("distance")));
 
-        double emissaoPorKM = modoSelecionado.getEmissaoPorKM();
-        double emissaoTotalRota = distancia * emissaoPorKM / 1000;
+        List<ModoTransporte> modosComEmissao = new ArrayList<>();
+        for (ModoTransporte modo : modoTransporteLista.getModosTransporte()) {
+            double emissaoTotalRota = distancia * modo.getEmissaoPorKM() / 1000;
+            ModoTransporte modoComEmissao = new ModoTransporte(modo.getNomeModo(), emissaoTotalRota);
+            modosComEmissao.add(modoComEmissao);
+        }
+
 
         Map<String, Object> resultado = new HashMap<>();
-        resultado.put("ModoTransporte", modoTransporte);
-        resultado.put("EmissaoCarbono", emissaoTotalRota);
+        resultado.put("ModosTransporte", modosComEmissao);
         resultado.put("RespostaOSRM", rota);
 
         return resultado;
