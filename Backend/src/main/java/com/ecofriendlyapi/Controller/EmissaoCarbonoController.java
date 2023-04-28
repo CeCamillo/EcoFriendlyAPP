@@ -5,11 +5,9 @@ import com.ecofriendlyapi.Model.ModoTransporteLista;
 import com.ecofriendlyapi.Service.EmissaoCarbonoService;
 import com.ecofriendlyapi.Service.OsrmService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +46,7 @@ public class EmissaoCarbonoController {
 
         List<ModoTransporte> modosComEmissao = new ArrayList<>();
         for (ModoTransporte modo : modoTransporteLista.getModosTransporte()) {
-            double emissaoTotalRota = distancia * modo.getEmissaoPorKM() / 1000;
+            double emissaoTotalRota = distancia * modo.getEmissaoCarbono() / 1000;
             ModoTransporte modoComEmissao = new ModoTransporte(modo.getNomeModo(), emissaoTotalRota);
             modosComEmissao.add(modoComEmissao);
         }

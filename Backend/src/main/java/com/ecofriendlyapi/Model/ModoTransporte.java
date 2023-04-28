@@ -2,11 +2,11 @@ package com.ecofriendlyapi.Model;
 
 public class ModoTransporte {
     private String nomeModo;
-    private double emissaoPorKM;
+    private double emissaoCarbono;
 
-    public ModoTransporte(String nomeModo, double emissaoPorKM) {
+    public ModoTransporte(String nomeModo, double emissaoCarbono) {
         this.nomeModo = nomeModo;
-        this.emissaoPorKM = emissaoPorKM;
+        this.emissaoCarbono = emissaoCarbono;
     }
 
     public String getNomeModo() {
@@ -17,11 +17,11 @@ public class ModoTransporte {
         this.nomeModo = nomeModo;
     }
 
-    public double getEmissaoPorKM() {
-        return emissaoPorKM;
+    public double getEmissaoCarbono() {
+        return emissaoCarbono;
     }
 
-    public void setEmissaoPorKM(double emissaoPorKM) {
-        this.emissaoPorKM = emissaoPorKM;
+    public void setEmissaoCarbono(double emissaoCarbono) {
+        this.emissaoCarbono = emissaoCarbono;
     }
 }

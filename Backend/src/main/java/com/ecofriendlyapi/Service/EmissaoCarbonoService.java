@@ -5,9 +5,6 @@ import com.ecofriendlyapi.Model.ModoTransporteLista;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-
 @Service
 public class EmissaoCarbonoService {
     private ModoTransporteLista modoTransporteLista;
@@ -17,7 +14,7 @@ public class EmissaoCarbonoService {
     }
 
     public double emissaoCarbono(ModoTransporte modoTransporte, double distancia) {
-        return modoTransporte.getEmissaoPorKM() * distancia;
+        return modoTransporte.getEmissaoCarbono() * distancia;
     }
 
     public ModoTransporte procurarTransporte(String nomeModo) {
