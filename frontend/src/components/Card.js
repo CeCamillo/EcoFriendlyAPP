@@ -1,27 +1,51 @@
 import { StyleSheet, View, Text } from "react-native";
 
 export const Card = ({ vehicle, distance, emission, time }) => {
-  return (
-    <View style={styles.card}>
-      <View style={{ alignItems: "center" }}>
-        <Text style={styles.title}>{vehicle}</Text>
+  if (emission == undefined) {
+    return (
+      <View style={styles.card}>
+        <View style={{ alignItems: "center" }}>
+          <Text style={styles.title}>{vehicle}</Text>
+        </View>
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text>
+            <Text style={styles.textBold}>Distância: </Text>
+            {distance}
+          </Text>
+          <Text>
+            <Text style={styles.textBold}>Emissão: </Text>
+            {emission}
+          </Text>
+          <Text>
+            <Text style={styles.textBold}>Tempo: </Text>
+            {time}
+          </Text>
+        </View>
       </View>
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <Text>
-          <Text style={styles.textBold}>Distância: </Text>
-          {distance}
-        </Text>
-        <Text>
-          <Text style={styles.textBold}>Emissão: </Text>
-          {emission}
-        </Text>
-        <Text>
-          <Text style={styles.textBold}>Tempo: </Text>
-          {time}
-        </Text>
+    );
+  } else {
+    return (
+      <View style={styles.card}>
+        <View style={{ alignItems: "center" }}>
+          <Text style={styles.title}>{vehicle}</Text>
+        </View>
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text>
+            <Text style={styles.textBold}>Distância: </Text>
+            {distance}
+          </Text>
+          <Text>
+            <Text style={styles.textBold}>Emissão: </Text>
+            {emission}
+          </Text>
+          <Text>
+            <Text style={styles.textBold}>Tempo: </Text>
+            {time}
+          </Text>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({

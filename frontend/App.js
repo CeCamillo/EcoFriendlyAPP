@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { Home } from "./src/screens/Home/Home";
 import { Result } from "./src/screens/Result/Result";
 import { useState, useEffect } from "react";
@@ -21,19 +21,38 @@ export default function App() {
     setResultDisplay("none");
   }
 
-  return (
-    <View style={styles.body}>
-      <Home
-        display={homeDisplay}
-        toResult={(travel) => {
-          toResult();
-          setTravel(travel);
-        }}
-      />
-      <Result display={resultDisplay} travel={travel} toHome={() => toHome()} />
-      <StatusBar style="auto" />
-    </View>
-  );
+  if (homeDisplay == "flex") {
+    return (
+      <View style={styles.body}>
+        <Home
+          display={homeDisplay}
+          toResult={(travel) => {
+            toResult();
+            setTravel(travel);
+          }}
+        />
+        <StatusBar style="auto" />
+      </View>
+    );
+  } else if (resultDisplay == "flex") {
+    return (
+      <View style={styles.body}>
+        <Result
+          display={resultDisplay}
+          travel={travel}
+          toHome={() => toHome()}
+        />
+        <StatusBar style="auto" />
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.body}>
+        <Text>Regcarregue o APP</Text>
+        <StatusBar style="auto" />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

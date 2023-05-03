@@ -1,28 +1,16 @@
 import { StyleSheet, View, Text, Image, Pressable } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BackButton from "../../components/BackButton";
 import { Card } from "../../components/Card";
 
 export const Result = ({ display, toHome, travel }) => {
-  const [infoDisplay, setInfoDisplay] = useState("flex");
-  const [infoVisible, setInfoVisible] = useState(true);
+  // const [emissao, setEmissao] = useState(0); ARRUMAR
+  // setTimeout(() => setEmissao(travel.transporte[0]), 2000);
 
   // Calculos pra formatar duração
   let horas = Math.floor(travel.duration / 3600);
   let minutos = Math.floor((travel.duration % 3600) / 60);
-
   let durationFormated = horas.toString() + "h" + minutos.toString() + "min";
-
-  function toggleInfo() {
-    // alert(travel.distance + "" + travel.duration);
-    if (infoVisible === true) {
-      setInfoDisplay("none");
-      setInfoVisible(false);
-    } else if (infoVisible === false) {
-      setInfoDisplay("flex");
-      setInfoVisible(true);
-    }
-  }
 
   return (
     <View style={[styles.resultContainer, { display: display }]}>
@@ -33,49 +21,28 @@ export const Result = ({ display, toHome, travel }) => {
         <Card
           vehicle={"Carro"}
           distance={`${(travel.distance / 1000).toFixed(1)} km`}
-          emission={`${((travel.distance / 1000) * 0.12).toFixed(2)} g/km`}
+          emission={`${travel.transporte && travel.transporte.carro} g/km`}
           time={durationFormated}
         />
-        <Card vehicle={"Automovel"} />
-        <Card vehicle={"Automovel"} />
-        <Card vehicle={"Automovel"} />
+        <Card
+          vehicle={"Moto"}
+          distance={`${(travel.distance / 1000).toFixed(1)} km`}
+          emission={`${travel.transporte && travel.transporte.moto} g/km`}
+          time={durationFormated}
+        />
+        <Card
+          vehicle={"Onibus"}
+          distance={`${(travel.distance / 1000).toFixed(1)} km`}
+          emission={`${travel.transporte && travel.transporte.onibus} g/km`}
+          time={durationFormated}
+        />
+        <Card
+          vehicle={"Trem"}
+          distance={`${(travel.distance / 1000).toFixed(1)} km`}
+          emission={`${travel.transporte && travel.transporte.trem} g/km`}
+          time={durationFormated}
+        />
       </View>
-
-      {/* Conteúdo abaixo só salvando pra caso precise */}
-
-      {/* <View style={styles.infoContainer}>
-        <Pressable
-          onPress={() => {
-            toggleInfo();
-          }}
-          style={styles.slideBar}
-        >
-          <View style={styles.slideBarInside} />
-        </Pressable>
-        <View style={[styles.info, { display: infoDisplay }]}>
-          <View style={{ flex: 1, alignItems: "center" }}>
-            <Image
-              source={require("../../../assets/img/bicicleta.png")}
-              style={{ width: 100, height: 100 }}
-            />
-            <Text style={styles.textBold}>Carro</Text>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text>
-              <Text style={styles.textBold}>Distancia: </Text>
-              {(travel.distance / 1000).toFixed(1)} km
-            </Text>
-            <Text>
-              <Text style={styles.textBold}>Emissao (CO2): </Text>
-              {((travel.distance / 1000) * 0.12).toFixed(2)} g/km
-            </Text>
-            <Text>
-              <Text style={styles.textBold}>Tempo: </Text>
-              {durationFormated}
-            </Text>
-          </View>
-        </View>
-      </View> */}
     </View>
   );
 };

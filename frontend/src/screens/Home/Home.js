@@ -14,7 +14,11 @@ export const Home = ({ display, toResult }) => {
   let phoneLocal = { latitude: null, longitude: null };
   const [expoLocation, setExpoLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  let travel = { duration: null, distance: null, way: null };
+  let travel = {
+    transporte: [0],
+    duration: null,
+    distance: null,
+  };
 
   useEffect(() => {
     (async () => {
@@ -106,9 +110,20 @@ export const Home = ({ display, toResult }) => {
           `http://192.168.15.24:8080/emissao?initLat=${phoneLocal.latitude}&initLon=${phoneLocal.longitude}&finLat=${locationAPI.latitude}&finLon=${locationAPI.longitude}`
         );
         console.log(distanceResult.data);
-        travel.distance = distanceResult.data.routes[0].distance;
-        travel.duration = distanceResult.data.routes[0].duration;
-        travel.way = distanceResult.data.routes[0].geometry.coordinates;
+        travel.transporte = {
+          carro:
+            distanceResult.data.ModosTransporte[0].emissaoCarbono.toFixed(2),
+          moto: distanceResult.data.ModosTransporte[1].emissaoCarbono.toFixed(
+            2
+          ),
+          onibus:
+            distanceResult.data.ModosTransporte[2].emissaoCarbono.toFixed(2),
+          trem: distanceResult.data.ModosTransporte[3].emissaoCarbono.toFixed(
+            2
+          ),
+        };
+        travel.distance = distanceResult.data.RespostaOSRM.routes[0].distance;
+        travel.duration = distanceResult.data.RespostaOSRM.routes[0].duration;
       } catch (error) {
         console.log(error);
       }
