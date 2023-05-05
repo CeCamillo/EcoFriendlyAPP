@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,30 +37,25 @@ public class EmissaoCarbonoController {
             @RequestParam("finLat") double destLat,
             @RequestParam("finLon") double destLon
     ) {
-        HashMap<String, Object> responses = new HashMap<>();
+        Map<String, Object> rota = osrmService.getRoute(srcLat, srcLon, destLat, destLon);
 
-        for (String profile : Arrays.asList("driving", "foot", "cycling")) {
-            Map<String, Object> rota = osrmService.getRoute(profile, srcLat, srcLon, destLat, destLon);
-            Double distancia = ((List<Map<String, Object>>) rota.get("routes"))
-                    .stream()
-                    .map(route -> (Double) ((Map<String, Object>) ((List<Map<String, Object>>) route.get("legs")).get(0)).get("distance"))
-                    .findFirst()
-                    .orElse(0.0);
+        Double distancia = ((List<Map<String, Object>>) rota.get("routes"))
+                .stream()
+                .flatMap(route -> ((List<Map<String, Object>>) route.get("legs")).stream())
+                .collect(Collectors.summingDouble(leg -> (Double) leg.get("distance")));
 
-            List<ModoTransporte> modosComEmissao = modoTransporteLista.getModosTransporte().stream()
-                    .map(modo -> {
-                        double emissaoTotalRota = distancia * modo.getEmissaoCarbono() / 1000;
-                        return new ModoTransporte(modo.getNomeModo(), emissaoTotalRota);
-                    })
-                    .collect(Collectors.toList());
-
-            Map<String, Object> resultado = new HashMap<>();
-            resultado.put("ModosTransporte", modosComEmissao);
-            resultado.put("RespostaOSRM", rota);
-
-            responses.put(profile, resultado);
+        List<ModoTransporte> modosComEmissao = new ArrayList<>();
+        for (ModoTransporte modo : modoTransporteLista.getModosTransporte()) {
+            double emissaoTotalRota = distancia * modo.getEmissaoCarbono() / 1000;
+            ModoTransporte modoComEmissao = new ModoTransporte(modo.getNomeModo(), emissaoTotalRota);
+            modosComEmissao.add(modoComEmissao);
         }
 
-        return responses;
+
+        Map<String, Object> resultado = new HashMap<>();
+        resultado.put("ModosTransporte", modosComEmissao);
+        resultado.put("RespostaOSRM", rota);
+
+        return resultado;
     }
 }
